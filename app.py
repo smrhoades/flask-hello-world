@@ -46,6 +46,26 @@ def database_insert():
     conn.close()
     return "Basketball Table Populated"
 
+@app.route('/db_select')
+def database_select():
+    conn = psycopg.connect("postgresql://lab10_database_smrhoades_user:CqHRorcahSKsRB3DhXEuUG1uCEYesr9J@dpg-d24kca15pdvs73fo4e5g-a/lab10_database_smrhoades")
+    cur = conn.cursor()
+    cur.execute('''
+        SELECT * FROM Basketball;
+    ''')
+    records = cur.fetchall()
+    conn.commit()
+    conn.close()
+    response_string = ""
+    response_string += "<table>"
+    for player in records:
+        response_string+="<tr>"
+        for info in player:
+            response_string+="<td>{}</td>".format(info)
+        response_string+="</tr>"
+    response_string += "</table>"
+    return response_string
+
 @app.route('/db_drop')
 def database_drop():
     conn = psycopg.connect("postgresql://lab10_database_smrhoades_user:CqHRorcahSKsRB3DhXEuUG1uCEYesr9J@dpg-d24kca15pdvs73fo4e5g-a/lab10_database_smrhoades")
